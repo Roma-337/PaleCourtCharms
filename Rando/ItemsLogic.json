@@ -1,0 +1,22 @@
+[
+  {
+    "name": "PURITY",
+    "logic": "Fungus3_48[right1]"
+  },
+  {
+    "name": "LAMENT",
+    "logic": "Room_Mansion[left1]"
+  },
+  {
+    "name": "BOON",
+    "logic": "Room_Mansion[left1]"
+  },
+  {
+    "name": "BLOOM",
+    "logic": "Abyss_09[right3]"
+  },
+  {
+    "name": "Kings_Honour",
+    "logic": "(Waterways_13[left1] + Waterways_13[right1])"
+  }
+]
