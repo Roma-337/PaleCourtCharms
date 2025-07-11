@@ -159,8 +159,12 @@ public static SaveModSettings Settings => Instance?.localSettings;
             var honourItem = new HonourUpgradeItem();
             Finder.DefineCustomItem(honourItem);
             SetupProgressionChain();
-         if (ModHooks.GetMod("Randomizer 4")is Mod)
-             ConnectionMenu.Hook();
+           if (ModHooks.GetMod("Randomizer 4") is Mod)
+            {
+                RandoManager.Hook();
+                ConnectionMenu.Hook();
+                
+            }
         }
         
         private static bool randoInitialized = false;
