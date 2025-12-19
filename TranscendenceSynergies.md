@@ -5,7 +5,7 @@ Works with Lemm's strength by multiplying the boost it(Lemm's strength) already 
 
 # Boon of Hallownest
 
-Scales spell size the same way as normal spells with Shaman Amp.
+Scales spell size the same way normal spells scale with Shaman Amp.
 
 Slows down daggers the same way Snail Soul slows down fireballs.
 
