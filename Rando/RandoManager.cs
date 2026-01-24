@@ -1,4 +1,8 @@
 using Modding;
+using System;
+using ItemChanger;
+using RandomizerMod.IC;
+
 namespace PaleCourtCharms.Rando
 {
     internal static class RandoManager
@@ -7,18 +11,30 @@ namespace PaleCourtCharms.Rando
         {
             ItemHandler.Hook();
 
-           
             On.UIManager.StartNewGame += HandleNewGame;
         }
 
+        public static bool IsRandoSave()
+        {
+            try
+            {
+                var rm = ItemChangerMod.Modules.Get<RandomizerModule>();
+                return rm != null;
+            }
+            catch (NullReferenceException)
+            {
+                return false;
+            }
+        }
         private static void HandleNewGame(On.UIManager.orig_StartNewGame orig, UIManager self, bool permaDeath, bool bossRush)
         {
             orig(self, permaDeath, bossRush);
 
-           if (ModHooks.GetMod("Randomizer 4") is Mod && RandomizerMod.RandomizerMod.IsRandoSave)
-{
+
+            if (ModHooks.GetMod("Randomizer 4") is Mod && RandomizerMod.RandomizerMod.IsRandoSave)
+            {
                 PaleCourtCharms.Instance.StartGame();
-}
+            }
 
         }
     }
