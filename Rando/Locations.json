@@ -17,6 +17,7 @@
   },
   {
     "name": "Kings_Honour",
-    "logic": "(Waterways_13[left1] + (LEFTCLAW + RIGHTCLAW | (LEFTCLAW | RIGHTCLAW) + (WINGS | ENEMYPOGOS) | LEFTCLAW + (RIGHTDASH | RIGHTSUPERDASH)) | Waterways_13[left2] + (ACID + (RIGHTCLAW | WINGS | ENEMYPOGOS) | ACIDSKIPS + LEFTCLAW + RIGHTSUPERDASH + (WINGS | RIGHTCLAW)))"
+    "logic": "Waterways_13"
   }
 ]
+
