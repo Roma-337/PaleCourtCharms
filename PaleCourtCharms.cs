@@ -79,7 +79,7 @@ namespace PaleCourtCharms
 
         public static SaveModSettings Settings => Instance?.localSettings;
 
-        public override string GetVersion() => "1.3.5";
+        public override string GetVersion() => "1.3.6";
 
         public PaleCourtCharms() : base("PaleCourtCharms")
         {
@@ -359,13 +359,6 @@ namespace PaleCourtCharms
                             return true;
                         case "gotCharm":
                             localSettings.gotCharms[idx] = value;
-
-                            if (value)
-                            {
-
-                                GameManager.instance.SaveGame();
-                            }
-
                             return true;
                         case "newCharm":
                             localSettings.newCharms[idx] = value;
@@ -513,7 +506,6 @@ namespace PaleCourtCharms
         public string LogicSettings { get; set; } = "{}";
     }
 }
-
 
 
 
