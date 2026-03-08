@@ -61,8 +61,9 @@ namespace PaleCourtCharms.Rando
     var t = AddTag<InteropTag>();
     t.Message = "RandoSupplementalMetadata";
     t.Properties["ModSource"] = PaleCourtCharms.Instance.GetName();
-    t.Properties["PoolGroup"] = PoolNames.Charm;
+    t.Properties["PoolGroup"] = "Charms";
 }
 
   }
 }
+
