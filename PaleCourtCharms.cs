@@ -17,7 +17,6 @@ using PaleCourtCharms.Rando;
 using System.Linq;
 using RandomizerMod.IC;
 using PaleCourtCharms.Interop;
-using System.Threading;
 
 namespace PaleCourtCharms
 {
@@ -522,6 +521,7 @@ namespace PaleCourtCharms
         public string LogicSettings { get; set; } = "{}";
     }
 }
+
 
 
 
