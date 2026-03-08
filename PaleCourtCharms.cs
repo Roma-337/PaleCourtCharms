@@ -17,6 +17,7 @@ using PaleCourtCharms.Rando;
 using System.Linq;
 using RandomizerMod.IC;
 using PaleCourtCharms.Interop;
+using System.Threading;
 
 namespace PaleCourtCharms
 {
@@ -79,7 +80,7 @@ namespace PaleCourtCharms
 
         public static SaveModSettings Settings => Instance?.localSettings;
 
-        public override string GetVersion() => "1.3.6";
+        public override string GetVersion() => "1.3.7";
 
         public PaleCourtCharms() : base("PaleCourtCharms")
         {
@@ -198,6 +199,7 @@ namespace PaleCourtCharms
             On.GameManager.StartNewGame += GameManager_StartNewGame;
             ModHooks.AfterSavegameLoadHook += OnAfterSave;
             On.HeroController.Awake += HeroController_Awake;
+            On.PlayerData.CountCharms += CountPCC;
             preloadedGO["PV"] = preloadedObjects["GG_Hollow_Knight"]["Battle Scene/HK Prime"];
             preloadedGO["Blast"] = preloadedObjects["GG_Hollow_Knight"]["Battle Scene/Focus Blasts/HK Prime Blast/Blast"];
             preloadedGO["Knight Ball"] = preloadedObjects["Dream_Final_Boss"]["Boss Control/Radiance/Death/Knight Split/Knight Ball"];
@@ -481,11 +483,25 @@ namespace PaleCourtCharms
             if (GameManager.instance != null && GameManager.instance.gameObject.GetComponent<Amulets>() == null)
             {
                 GameManager.instance.gameObject.AddComponent<Amulets>();
+            }
+        }
+        private void CountPCC(On.PlayerData.orig_CountCharms orig, PlayerData self)
+        {
+            orig(self);
 
+            var inst = PaleCourtCharms.Instance;
+            var settings = inst?.localSettings;
+            if (settings == null || settings.gotCharms == null) return;
+
+            int add = 0;
+
+            for (int i = 0; i < Charms.Count; i++)
+            {
+                if (settings.gotCharms[i]) add++;
             }
 
+            self.SetInt("charmsOwned", self.GetInt("charmsOwned") + add); ;
         }
-
 
         private new void Log(object msg) => Modding.Logger.Log("[PaleCourtCharms] " + msg);
     }
