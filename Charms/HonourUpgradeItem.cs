@@ -7,46 +7,52 @@ using UnityEngine;
 
 namespace PaleCourtCharms
 {
- public class HonourUpgradeItem : AbstractItem
-{
-   
-    private const string HonourKey = "Kings_Honour";
-
-  public HonourUpgradeItem()
-{
-    name = HonourKey;
-
-
-    string honourName    = PaleCourtCharms.LangStrings.Get("CHARM_NAME_HONOUR","UI");
-  
-    string honourShopDesc = PaleCourtCharms.LangStrings.Get("SHOP_DESCRIPTION_HONOUR", "RANDO");
-//this nonsense is needed so it just says "king's honour" in the shop and doesn't add a fake [-9999] cost
-//apparently keeps the language you had on at the time of creating the save
-            UIDef = new MsgUIDef
+    public class HonourUpgradeItem : AbstractItem
     {
-        name     = new BoxedString(honourName),
-        shopDesc = new BoxedString(honourShopDesc),
-        sprite   = new ICShiny.EmbeddedSprite { key = HonourKey }
-    };
-}
+        private const string HonourKey = "Kings_Honour";
 
+        public HonourUpgradeItem()
+        {
+            name = HonourKey;
+
+            UIDef = new MsgUIDef
+            {
+                name = new LanguageString("UI", "CHARM_NAME_HONOUR"),
+                shopDesc = new LanguageString("RANDO", "SHOP_DESCRIPTION_HONOUR"),
+                sprite = new ICShiny.EmbeddedSprite { key = HonourKey }
+            };
+        }
+
+        protected override void OnLoad()
+        {
+            Events.OnStringGet += AddNotchCostToCharmName;
+        }
+
+        protected override void OnUnload()
+        {
+            Events.OnStringGet -= AddNotchCostToCharmName;
+        }
+
+        private void AddNotchCostToCharmName(StringGetArgs args)
+        {
+            if (args.Source is LanguageString ls && ls.key == "CHARM_NAME_HONOUR")
+            {
+                args.Current = args.Current.Replace("-9999", $"{PlayerData.instance.charmCost_10}");
+            }
+        }
 
         public override void GiveImmediate(GiveInfo info)
         {
-
             PaleCourtCharms.Settings.upgradedCharm_10 = true;
             PlayerData.instance.SetBool("upgradedCharm_10", true);
-            
-        GameManager.instance.SaveGame();
-    }
+            GameManager.instance.SaveGame();
+        }
 
-    public override bool Redundant()
-    {
-        
-        return PlayerData.instance.GetBool("gotCharm_10") &&
-               PaleCourtCharms.Settings.upgradedCharm_10;
+        public override bool Redundant()
+        {
+            return PlayerData.instance.GetBool("gotCharm_10") &&
+                   PaleCourtCharms.Settings.upgradedCharm_10;
+        }
     }
-}
-
 }
 
