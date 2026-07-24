@@ -31,10 +31,10 @@ namespace PaleCourtCharms
 
         public void Awake()
         {
-        EnsureInitialized();
-         
+            EnsureInitialized();
+
         }
-        
+
         public void EnsureInitialized()
         {
             if (initialized) return;
@@ -48,7 +48,7 @@ namespace PaleCourtCharms
         {
             if (PaleCourtCharms.Settings.upgradedCharm_10)
             {
-               
+
                 self.spriteList[10] = PaleCourtCharms.SPRITES["Kings_Honour"];
             }
             else
@@ -67,13 +67,14 @@ namespace PaleCourtCharms
             //RepositionCharmsInInventory();
 
             _pvControl = Instantiate(PaleCourtCharms.preloadedGO["PV"].LocateMyFSM("Control"), _hc.transform);
+            PaleCourtCharms.PVControl = _pvControl;
             GameObject blast = Instantiate(PaleCourtCharms.preloadedGO["Blast"]);
             blast.SetActive(false);
             _blastControl = blast.LocateMyFSM("Control");
 
             //_pd.CalculateNotchesUsed();
 
-           
+
             _spellControl = _hc.spellControl;
             GameObject fireballParent = _spellControl.GetAction<SpawnObjectFromGlobalPool>("Fireball 2", 3).gameObject.Value;
             PlayMakerFSM fireballCast = fireballParent.LocateMyFSM("Fireball Cast");
@@ -88,7 +89,7 @@ namespace PaleCourtCharms
             // Boon of Hallownest
             _hc.gameObject.AddComponent<BoonSpells>().enabled = false;
             InsertCharmSpellEffectsInFsm();
-            
+
             // Vessels Lament
             _hc.gameObject.AddComponent<LamentControl>().enabled = false;
 
@@ -102,7 +103,7 @@ namespace PaleCourtCharms
 
             FloristInterop.Init();
 
-           
+
             _activated = true;
         }
 
@@ -176,14 +177,14 @@ namespace PaleCourtCharms
             var knightAnim = self.GetComponent<tk2dSpriteAnimator>();
             tk2dSpriteCollectionData collectionData = heroSprite.Collection;
             List<tk2dSpriteDefinition> knightSpriteDefs = collectionData.spriteDefinitions.ToList();
-            foreach(tk2dSpriteDefinition def in collection.spriteCollection.spriteDefinitions)
+            foreach (tk2dSpriteDefinition def in collection.spriteCollection.spriteDefinitions)
             {
                 def.material.shader = shader;
                 knightSpriteDefs.Add(def);
             }
             heroSprite.Collection.spriteDefinitions = knightSpriteDefs.ToArray();
             List<tk2dSpriteAnimationClip> knightClips = knightAnim.Library.clips.ToList();
-            foreach(tk2dSpriteAnimationClip clip in animation.clips)
+            foreach (tk2dSpriteAnimationClip clip in animation.clips)
             {
                 knightClips.Add(clip);
             }
@@ -203,7 +204,7 @@ namespace PaleCourtCharms
 
             // Nail Arts FSM
             PlayMakerFSM nailArts = self.gameObject.LocateMyFSM("Nail Arts");
-            if(nailArts.FsmStates[0].Fsm == null)
+            if (nailArts.FsmStates[0].Fsm == null)
             {
                 nailArts.Preprocess();
             }
@@ -284,7 +285,7 @@ namespace PaleCourtCharms
             nailArts.GetAction<Tk2dPlayAnimationWithEvents>("Dash Slash Void").clipName = "NA Dash Slash Void";
             nailArts.GetAction<Tk2dPlayAnimationWithEvents>("G Slash Void").clipName = "NA Big Slash Void";
 
-    
+
             // Insert activation and deactivation of void nail arts
             nailArts.InsertMethod("Activate Slash Void", 0, () =>
             {
@@ -321,19 +322,20 @@ namespace PaleCourtCharms
         private IEnumerator ResetVoidNarts(GameObject[] narts)
         {
             // This is necessary because otherwise the very first void nail art will always be a normal one
-            foreach(GameObject nart in narts)
+            foreach (GameObject nart in narts)
             {
                 nart.SetActive(true);
             }
             yield return new WaitForEndOfFrame();
-            foreach(GameObject nart in narts)
+            foreach (GameObject nart in narts)
             {
                 nart.SetActive(false);
             }
         }
 
         private void ModifyFuryForBloom()
-        {try
+        {
+            try
             {
                 PlayMakerFSM fury = _hc.gameObject.FindGameObjectInChildren("Charm Effects").LocateMyFSM("Fury");
                 Modding.Logger.LogFine("Fury Color: " + fury.GetAction<Tk2dSpriteSetColor>("Activate", 17).color.Value);
@@ -376,14 +378,14 @@ namespace PaleCourtCharms
 
         private void CharmUpdate(PlayerData playerData, HeroController hc)
         {
-        
-            if(!_activated)
+
+            if (!_activated)
             {
-             
+
                 return;
             }
 
-            _hc.GetComponent<RoyalAura>().enabled = 
+            _hc.GetComponent<RoyalAura>().enabled =
                 playerData.GetBool("equippedCharm_" + Charms.DefendersCrest) && PaleCourtCharms.Settings.upgradedCharm_10;
 
             _hc.GetComponent<Purity>().enabled = PaleCourtCharms.Settings.equippedCharms[0];
@@ -495,7 +497,7 @@ namespace PaleCourtCharms
         {
             if (_blastKnight != null)
             {
-                
+
                 _blastKnight.layer = 17;
                 Animator anim = _blastKnight.GetComponent<Animator>();
                 anim.speed = 1;
@@ -538,7 +540,7 @@ namespace PaleCourtCharms
                 blastCollider.enabled = false;
                 yield return new WaitForSeconds(0.69f);
                 Destroy(_blastKnight);
-            }         
+            }
         }
 
         private void CancelBlast()
