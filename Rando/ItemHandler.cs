@@ -309,6 +309,16 @@ namespace PaleCourtCharms.Rando
                     {
                         rb.RemoveLocationByName(key);
                         rb.AddLocationByName(key);
+                        rb.EditLocationRequest(key, info =>
+                        {
+                            info.getLocationDef = () => new LocationDef
+                            {
+                                Name = key,
+                                SceneName = GetSceneName(key),
+                                FlexibleCount = false,
+                                AdditionalProgressionPenalty = false
+                            };
+                        });
                         rb.AddItemByName(key);
                         rb.EditItemRequest(key, info =>
                         {
@@ -395,7 +405,14 @@ namespace PaleCourtCharms.Rando
             for (int i = 0; i < n; i++)
                 PaleCourtCharms.CharmCostsByID[PaleCourtCharms.CharmIDs[i]] = costs[i];
         }
+        private static string GetSceneName(string key)
+        {
+            if (key == HonourKey)
+                return ICShiny.HonourScene;
 
+            int idx = Array.IndexOf(PaleCourtCharms.CharmKeys, key);
+            return idx >= 0 ? ICShiny.CharmScenes[idx] : null;
+        }
         private static void InjectLogic(GenerationSettings gs, LogicManagerBuilder lmb)
         {
             try
@@ -403,36 +420,12 @@ namespace PaleCourtCharms.Rando
                 foreach (var key in PaleCourtCharms.CharmKeys)
                     lmb.AddItem(new SingleItem(key, new TermValue(lmb.GetOrAddTerm(key), 1)));
                 lmb.AddItem(new SingleItem(HonourKey, new TermValue(lmb.GetOrAddTerm(HonourKey), 1)));
-
-                LoadAdditionalLogicFiles(lmb);
             }
             catch (Exception e)
             {
                 Modding.Logger.LogError($"[PaleCourtCharms] InjectLogic threw: {e}");
                 throw;
             }
-        }
-
-        private static void LoadAdditionalLogicFiles(LogicManagerBuilder lmb)
-        {
-            var modDir = System.IO.Path.GetDirectoryName(typeof(ItemHandler).Assembly.Location);
-            var jsonFmt = new JsonLogicFormat();
-
-            void TryLoad(string file, LogicFileType type)
-            {
-                var path = System.IO.Path.Combine(modDir, file);
-                if (System.IO.File.Exists(path))
-                {
-                    using var s = System.IO.File.OpenRead(path);
-                    lmb.DeserializeFile(type, jsonFmt, s);
-                }
-            }
-
-            TryLoad("LogicMacros.json", LogicFileType.MacroEdit);
-            TryLoad("LogicWaypoints.json", LogicFileType.Waypoints);
-            TryLoad("ConnectionLogicPatches.json", LogicFileType.LogicEdit);
-            TryLoad("Locations.json", LogicFileType.Locations);
-            TryLoad("Items.json", LogicFileType.ItemStrings);
         }
     }
 }
