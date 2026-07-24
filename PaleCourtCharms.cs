@@ -17,6 +17,7 @@ using PaleCourtCharms.Rando;
 using System.Linq;
 using RandomizerMod.IC;
 using PaleCourtCharms.Interop;
+using HutongGames.PlayMaker;
 
 namespace PaleCourtCharms
 {
@@ -37,6 +38,7 @@ namespace PaleCourtCharms
         public static Dictionary<string, AnimationClip> AnimClips { get; } = new();
         public static Dictionary<string, GameObject> preloadedGO { get; } = new();
         public static readonly Dictionary<string, Sprite> SPRITES = new();
+        public static PlayMakerFSM PVControl { get; internal set; }
 
         private SaveModSettings localSettings = new();
         public SaveModSettings OnSaveLocal()
@@ -79,7 +81,7 @@ namespace PaleCourtCharms
 
         public static SaveModSettings Settings => Instance?.localSettings;
 
-        public override string GetVersion() => "1.3.7";
+        public override string GetVersion() => "1.4.0";
 
         public PaleCourtCharms() : base("PaleCourtCharms")
         {
@@ -434,7 +436,6 @@ namespace PaleCourtCharms
         }
 
 
-
         private static void ToggleAllCharms(bool give)
         {
             for (int i = 0; i < CharmIDs.Count; i++)
@@ -518,10 +519,11 @@ namespace PaleCourtCharms
     {
         public bool AddCharms { get; set; } = false;
         public bool RandomizeCosts { get; set; } = false;
-        public string LogicSettings { get; set; } = "{}";
+
+        //public string LogicSettings { get; set; } = "{}"; 
+        // (i'll never write it)
     }
 }
-
 
 
 
